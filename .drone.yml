@@ -11,6 +11,7 @@ steps:
     commands:
       - pwd
       - ls
+      - cd src
       - go env
       - go version
       - go build
