@@ -11,3 +11,11 @@ pipeline:
       - go env
       - go version
       - go build
+
+  publish:
+    image: plugins/docker
+    registry: https://index.docker.io/v1/
+    repo: slowmoon/first-example
+    secrets: [ slowmoon, along665 ]
+    tags:
+      - latest
