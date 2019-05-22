@@ -1,20 +1,15 @@
+kind: pipeline
+name: drone
+
 workspace:
   base: /opt
-  path: src/first-project/src
+  path: src/first-project
 
-
-pipeline:
-  build:
+steps:
+  - name: build
     image: golang:1.12
     commands:
       - pwd
       - go env
       - go version
       - go build
-
-  publish:
-    image: plugins/docker
-    repo: slowmoon/first-example
-    secrets: [ slowmoon, along665 ]
-    tags:
-      - latest
