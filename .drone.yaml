@@ -1,0 +1,13 @@
+workspace:
+  base: /go
+  path: src/first-project/src
+
+
+pipeline:
+  build:
+    image: golang:1.12
+    commands:
+      - pwd
+      - go env
+      - go version
+      - go build
