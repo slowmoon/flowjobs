@@ -15,4 +15,4 @@ steps:
       - go env
       - go version
       - go build
-      - game-server
+      - ./game-server
