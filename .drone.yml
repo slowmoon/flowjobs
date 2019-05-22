@@ -10,6 +10,7 @@ steps:
     image: golang:1.12
     commands:
       - pwd
+      - ls
       - go env
       - go version
       - go build
