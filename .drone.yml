@@ -3,13 +3,13 @@ name: drone
 
 workspace:
   base: /opt
-  path: src/first-project
+  path: src/first_project
 
 steps:
   - name: build
     image: golang:1.12
     environment:
-      PATH=/go:/opt/src/first-project
+      PATH=/go:/opt/src/first_project
     commands:
       - export $PATH
       - go build 
