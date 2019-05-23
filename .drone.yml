@@ -46,5 +46,4 @@ steps:
       password:
          from_secret: ssh_password
       script:
-        - docker-compose pull slowmoon/first-example:latest
-        - docker-compose up
+        - docker run  slowmoon/first-example:latest
