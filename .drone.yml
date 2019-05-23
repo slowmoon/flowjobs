@@ -9,8 +9,8 @@ steps:
   - name: build
     image: golang:1.12
     environment:
-      PATH: /go:/opt/src/first_project
+      GOPATH: /go:/opt/src/first_project
     commands:
-      - export $PATH
+      - export $GOPATH
       - go build 
       - ./game-server
