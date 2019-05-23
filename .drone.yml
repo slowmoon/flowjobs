@@ -22,7 +22,7 @@ steps:
       password:
         from_secret: ssh_password
       target:
-        /opt
+        /home/tomcat/drone
       source:
         ./src/game-server
 
