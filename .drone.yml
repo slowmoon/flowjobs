@@ -13,6 +13,14 @@ steps:
       - go build
 
 
+  - name: publish
+    image: plugins/docker
+    repo: slowmoon/first-example # docker仓库地址
+    secrets: [ docker_username, docker_password ]
+    tags:
+      - latest
+
+
   - name: scp
     image: appleboy/drone-scp
     settings:
