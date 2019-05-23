@@ -1,0 +1,64 @@
+version: '3'
+
+networks:
+   git-drone:
+
+services:
+  drone-server:
+    image: drone/drone:1
+    container_name: drone-server
+    ports:
+      - 8050:80
+      - 8543:443
+    volumes:
+      - /var/lib/drone:/data
+    restart: always
+    environment:
+      - DRONE_GIT_ALWAYS_AUTH=false
+      - DRONE_GITLAB_SERVER=http://${HOSTADDR:-35.220.222.205}:8090
+      - DRONE_GITLAB_CLIENT_ID=6189a3f6b8e0af9ecbb5f45b862eed8701901a162a06cd0ec5d2074633e0ca0a
+      - DRONE_GITLAB_CLIENT_SECRET=ad9b81b6bc049f385b828b6c6736335c5b4432f663251dd73755bd4084aadd7e
+      - DRONE_RPC_SECRET=my-drone
+      - DRONE_SERVER_HOST=${HOSTADDR:-35.220.222.205}:8050
+      - DRONE_SERVER_PROTO=http
+      - DRONE_AGENTS_ENABLED=true
+      - DRONE_TLS_AUTOCERT=false
+    depends_on:
+      - gitlab-ce
+    networks:
+       - git-drone
+
+  drone-agent:
+    image: drone/agent:1
+    container_name: drone-agent
+    restart: always
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_RPC_SERVER=drone-server:80
+      - DRONE_RPC_SECRET=my-drone
+      - DRONE_RUNNER_CAPACITY=2
+      - DRONE_RUNNER_NAME=ec2-203-102-508.docker.com
+    networks:
+       - git-drone
+
+  gitlab-ce:
+    image: 'gitlab/gitlab-ce:latest'
+    container_name: gitlab-ce
+    restart: always
+    hostname: 'gitlab.example.com'
+    networks:
+      - git-drone
+#    environment:
+#      GITLAB_OMNIBUS_CONFIG: |
+#        external_url 'http://${HOSTADDR:-35.220.222.205}:8090'
+    ports:
+      - '2224:22'
+      - '8090:80'
+      - '8843:443'
+    volumes:
+      - /mnt/gitlab/etc:/etc/gitlab
+      - /mnt/gitlab/log:/var/log/gitlab
+      - /mnt/gitlab/data:/var/opt/gitlab

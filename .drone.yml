@@ -1,17 +1,19 @@
 kind: pipeline
 name: drone
 
+#base path first clone file to this path
 workspace:
   base: /opt
   path: src/first_project
 
 steps:
+  #second to build the project when use java, go or so, other project like python, node will not need this step
   - name: build
     image: golang:1.12
     commands:
       - cd src
       - go build
-
+   # scp the build binary file to remote server
   - name: scp
     image: appleboy/drone-scp
     settings:
@@ -26,7 +28,8 @@ steps:
         /home/tomcat/drone
       source:
         ./src/game-server
-    #need a Dockerfile in the root path
+
+    #publish the docker images to docker registry, which need a Dockerfile in the root path first
   - name: publish
     image: plugins/docker
     settings:
@@ -48,4 +51,4 @@ steps:
       password:
          from_secret: ssh_password
       script:
-        - docker run  slowmoon/first-example:latest
+        - docker run  --rm  slowmoon/first-example:latest
