@@ -8,7 +8,9 @@ workspace:
 steps:
   - name: build
     image: golang:1.12
+    environment:
+      PATH=/go:/opt/src/first-project
     commands:
-      - cd src
+      - export $PATH
       - go build 
       - ./game-server
