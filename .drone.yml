@@ -13,17 +13,6 @@ steps:
       - go build
 
 
-  - name: publish-docker
-    image: plugins/docker
-    settings:
-      repo: slowmoon/first-example
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      auto_tag: true
-
-
   - name: scp
     image: appleboy/drone-scp
     settings:
@@ -37,3 +26,25 @@ steps:
       source:
         ./src/game-server
 
+
+  - name: publish
+    image: plugins/docker
+    settings:
+      repo: slowmoon/first-example
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      auto_tag: true
+
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host: 35.220.222.205
+      user: tomcat
+      port: 22
+      password:
+         from_secret: ssh_password
+      script:
+        - docker-compose pull slowmoon/first-example:latest
+        - docker-compose up
