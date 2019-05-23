@@ -3,7 +3,7 @@ name: drone
 
 workspace:
   base: /opt
-  path: src/first-project
+  path: src/first_project
 
 steps:
   - name: build
