@@ -11,5 +11,5 @@ steps:
     environment:
       - GOPATH=/go:/opt/src/first-project
     commands:
-      - go build
+      - go build -o game-server src/main.go
       - ./game-server
