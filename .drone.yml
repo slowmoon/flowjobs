@@ -8,8 +8,21 @@ workspace:
 steps:
   - name: build
     image: golang:1.12
-    environment:
-      - GOPATH=/go:/opt/src/first-project
     commands:
+      - cd src
       - go build
-      - ./game-server
+
+
+  - name: scp
+    image: appleboy/drone-scp
+    settings:
+      host: 35.220.222.205
+      user: tomcat
+      port: 22
+      password:
+        from_secret: ssh_password
+      target:
+        /opt
+      source:
+        ./src/game-server
+
