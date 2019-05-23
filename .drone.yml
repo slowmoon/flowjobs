@@ -12,12 +12,13 @@ steps:
       - cd src
       - go build
 
-
   - name: scp
     image: appleboy/drone-scp
     settings:
-      host: 35.220.222.205
-      user: tomcat
+      host:
+        from_secret: ssh_host
+      user:
+        from_secret: ssh_user
       port: 22
       password:
         from_secret: ssh_password
@@ -25,8 +26,7 @@ steps:
         /home/tomcat/drone
       source:
         ./src/game-server
-
-
+    #need a Dockerfile in the root path
   - name: publish
     image: plugins/docker
     settings:
@@ -36,12 +36,14 @@ steps:
       password:
         from_secret: docker_password
       auto_tag: true
-
+    #ssh to the host machine and then  docker pull the images and run
   - name: deploy
     image: appleboy/drone-ssh
     settings:
-      host: 35.220.222.205
-      user: tomcat
+      host:
+        from_secret: ssh_host
+      user:
+        from_secret: ssh_user
       port: 22
       password:
          from_secret: ssh_password
