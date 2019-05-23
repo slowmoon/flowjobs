@@ -13,12 +13,15 @@ steps:
       - go build
 
 
-  - name: publish
+  - name: publish-docker
     image: plugins/docker
-    repo: slowmoon/first-example # docker仓库地址
-    secrets: [ docker_username, docker_password ]
-    tags:
-      - latest
+    settings:
+      repo: slowmoon/first-example
+      username:
+        from_password: docker_username
+      password:
+        from_password: docker_password
+      auto_tag: true
 
 
   - name: scp
