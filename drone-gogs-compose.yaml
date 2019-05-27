@@ -1,0 +1,69 @@
+version: '3'
+
+networks:
+  git-gogs:
+
+
+services:
+  drone-server:
+    container_name: drone-sever
+    image: drone/drone:1
+    restart: always
+    networks:
+      - git-gogs
+    ports:
+      - '8050:80'
+      - '8843:443'
+    environment:
+      - DRONE_GIT_ALWAYS_AUTH=false
+      - DRONE_GOGS_SERVER=http://${HOSTADDR:-35.220.222.205}:10080
+      - DRONE_RPC_SECRET=my-drone
+      - DRONE_SERVER_HOST=${HOSTADDR:-35.220.222.205}:8050
+      - DRONE_SERVER_PROTO=http
+      - DRONE_AGENTS_ENABLED=true
+      - DRONE_TLS_AUTOCERT=false
+    depends_on:
+      - gogs
+
+  drone-agent:
+    image: drone/agent:1
+    container_name: drone-agent
+    restart: always
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_RPC_SERVER=drone-server:80
+      - DRONE_RPC_SECRET=my-drone
+      - DRONE_RUNNER_CAPACITY=2
+      - DRONE_RUNNER_NAME=ec2-203-102-508.docker.com
+    networks:
+      - git-gogs
+
+  gogs:
+    image: gogs/gogs:latest
+    container_name: gogs
+    depends_on:
+      - mysql
+    ports:
+      - '10022:22'
+      - '10080:3000'
+    volumes:
+      - /var/gogs/data:/data
+    networks:
+      - git-gogs
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - '13306:3306'
+    environment:
+       MYSQL_ROOT_PASSWORD: 123456
+       MYSQL_DATABASE: gogs
+    volumes:
+      - /var/mysql/data:/var/lib/mysql
+    networks:
+      - git-gogs

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 networks:
    git-drone:
@@ -45,15 +45,14 @@ services:
        - git-drone
 
   gitlab-ce:
-    image: 'gitlab/gitlab-ce:latest'
+    image: 'gitlab/gitlab-ce:11.7.0-ce.0'
     container_name: gitlab-ce
     restart: always
-    hostname: 'gitlab.example.com'
     networks:
       - git-drone
-#    environment:
-#      GITLAB_OMNIBUS_CONFIG: |
-#        external_url 'http://${HOSTADDR:-35.220.222.205}:8090'
+        #   environment:
+        #GITLAB_OMNIBUS_CONFIG: |
+        # external_url 'http://192.168.116.138:8090'
     ports:
       - '2224:22'
       - '8090:80'
