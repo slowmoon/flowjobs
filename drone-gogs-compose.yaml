@@ -15,6 +15,7 @@ services:
       - '8050:80'
       - '8843:443'
     environment:
+      - DRONE_OPEN=true
       - DRONE_GIT_ALWAYS_AUTH=false
       - DRONE_GOGS_SERVER=http://${HOSTADDR:-35.220.222.205}:10080
       - DRONE_RPC_SECRET=my-drone
@@ -22,6 +23,7 @@ services:
       - DRONE_SERVER_PROTO=http
       - DRONE_AGENTS_ENABLED=true
       - DRONE_TLS_AUTOCERT=false
+      - DRONE_USER_CREATE=username:root,admin:true
     depends_on:
       - gogs
 
