@@ -1,7 +1,7 @@
 #  CI/CD example with gitlab and drone 
 
 #### install the gitlab and drone  
- 
+
 ###### first set environment variable HOSTADDR with your public network address or host address
 ```shell
 export HOSTADDR=xx:xx:xx:xx
